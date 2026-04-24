@@ -1,19 +1,23 @@
 name: Download YouTube Video to Repo
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   workflow_dispatch:
     inputs:
       video_url:
-        description: 'YouTube video URL'
+        description: "YouTube video URL"
         required: true
         type: string
       filename:
-        description: 'Output filename (e.g., video.mp4)'
+        description: "Output filename (e.g., video.mp4)"
         required: true
         type: string
       quality:
-        description: 'Format selection (best, worst, bestvideo+bestaudio, mp4)'
+        description: "Format selection (best, worst, bestvideo+bestaudio, mp4)"
         required: false
-        default: 'best'
+        default: "best"
         type: string
 
 jobs:
@@ -25,11 +29,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Install yt-dlp and dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y ffmpeg   # needed for merging video+audio
-          pip install yt-dlp
+      - name: Setup yt-dlp
+        uses: AnimMouse/setup-yt-dlp@v3
 
       - name: Download YouTube video
         run: |
